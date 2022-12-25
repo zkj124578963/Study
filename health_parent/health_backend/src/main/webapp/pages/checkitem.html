@@ -228,10 +228,36 @@
         },
         //钩子函数，VUE对象初始化完成后自动执行
         created() {
+            this.findPage();
         },
         methods: {
             //编辑
             handleEdit() {
+                //更新检查项确认按钮
+                this.$refs['dataEditForm'].validate((valid) => {
+                    if (valid) {
+                        //表单校验通过，发送更新数据的请求
+
+                        alert(this.formData)
+                        console.log(this.formData)
+                        axios.post("/checkitem/edit.do", this.formData).then((res) => {
+                            if (res.data.flag) {
+                                //更新数据成功，返回true
+                                this.dialogFormVisible4Edit = false
+                                this.findPage()
+                                this.$message.info("更新数据成功")
+                            } else {
+                                //更新数据失败，服务端返回error
+                                this.$message.error("更新数据失败")
+                                this.dialogFormVisible4Edit = false
+                            }
+                        })
+                    } else {
+                        //表单校验失败
+                        this.$message.error("表单检验数据失败，请检查参数")
+                        return false;
+                    }
+                })
 
             },
             //添加
@@ -252,21 +278,28 @@
                             }
                         }).finally(() => {
                             this.findPage();
+                            this.dialogFormVisible = false;
                         });
-
                     } else {
                         //表单校验不通过
                         this.$message.error("表单数据校验失败");
                         return false;
-
                     }
-
                 });
-
-
             },
             //分页查询
             findPage() {
+                //封装参数
+                var param = {
+                    currentPage: this.pagination.currentPage,//页码
+                    pageSize: this.pagination.pageSize,//每页显示的记录数
+                    queryString: this.pagination.queryString//查询条件
+                };
+                //发送请求，接收返回的两个参数
+                axios.post("/checkitem/findPage.do", param).then((res) => {
+                    this.dataList = res.data.rows;
+                    this.pagination.total = res.data.total;
+                });
             },
             // 重置表单
             resetForm() {
@@ -280,13 +313,49 @@
             },
             // 弹出编辑窗口
             handleUpdate(row) {
+                this.dialogFormVisible4Edit = true;
+                //获取原来的值
+                axios.get("/checkitem/findById.do?id=" + row.id).then((res) => {
+                    if (res.data.flag) {
+                        //查询数据成功
+                        this.formData = res.data.data;
+                    } else {
+                        //查询数据失败
+                        this.$message.error("或者数据失败")
+                    }
+
+                });
             },
             //切换页码
             handleCurrentChange(currentPage) {
+                //模型重新赋值当前页，重新查询
+                this.pagination.currentPage = currentPage;
+                this.findPage();
             },
             // 删除
             handleDelete(row) {
+                this.$confirm("确认删除当前选中记录吗？", "提示", {
+                    type: "warning",
+                }).then(() => {
+                        axios.get("/checkitem/delete.do?id=" + row.id).then((res) => {
+                            if (res.data.flag) {
+                                this.$message({
+                                    message: res.data.message,
+                                    type: "success"
+                                })
+                            } else {
+                                this.$message.error(res.data.message)
+                            }
+                            //执行删除检查项 操作之后刷新页面
+                            this.findPage();
+                        })
+                    }
+                ).catch(() => {
+                        this.$message.info("取消删除")
+                    }
+                );
             }
+
         }
     })
 </script>
