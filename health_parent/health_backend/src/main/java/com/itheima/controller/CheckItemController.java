@@ -1,4 +1,4 @@
-package com.itheima.controllor;
+package com.itheima.controller;
 
 import com.alibaba.dubbo.config.annotation.Reference;
 import com.itheima.constant.MessageConstant;
@@ -11,7 +11,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 @RequestMapping("/checkitem")
-public class CheckItemControllor {
+public class CheckItemController {
     @Reference
     private CheckItemService checkItemService;
 
