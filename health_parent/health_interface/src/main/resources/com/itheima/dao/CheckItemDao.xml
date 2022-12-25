@@ -4,8 +4,14 @@
 <mapper namespace="com.itheima.dao.CheckItemDao">
     <!--新增-->
     <insert id="add" parameterType="com.itheima.pojo.CheckItem">
-        insert into t_checkitem(code,name,sex,age,price,type,remark,attention)
-        values
-            (#{code},#{name},#{sex},#{age},#{price},#{type},#{remark},#{attention})
+        insert into t_checkitem(code, name, sex, age, price, type, remark, attention)
+        values (#{code}, #{name}, #{sex}, #{age}, #{price}, #{type}, #{remark}, #{attention})
     </insert>
+
+    <select id="selectByCondition" parameterType="string" resultType="com.itheima.pojo.CheckItem">
+        select * from t_checkitem
+        <if test="value != null and value.length > 0">
+            where code=#{value} or name=#{value}
+        </if>
+    </select>
 </mapper>
