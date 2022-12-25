@@ -32,8 +32,9 @@ public class CheckItemController {
 
         return new Result(true, MessageConstant.ADD_CHECKITEM_SUCCESS);
     }
+
     @RequestMapping("/findPage")
-    public PageResult findPage(@RequestBody QueryPageBean queryPageBean){
+    public PageResult findPage(@RequestBody QueryPageBean queryPageBean) {
         PageResult pageResult = checkItemService.pageQuery(queryPageBean);
         return pageResult;
     }
