@@ -16,5 +16,9 @@ public interface CheckItemDao {
 
     public long countByid(int id);
 
+    public void edit(CheckItem checkItem);
+
     public void deleteById(int id);
+
+    public CheckItem findById(int id);
 }
