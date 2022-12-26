@@ -7,9 +7,13 @@ import com.itheima.entity.QueryPageBean;
 import com.itheima.entity.Result;
 import com.itheima.pojo.CheckItem;
 import com.itheima.service.CheckItemService;
+import com.sun.org.apache.regexp.internal.RE;
+import org.junit.Test;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+
+import java.util.List;
 
 @RestController
 @RequestMapping("/checkitem")
@@ -61,6 +65,17 @@ public class CheckItemController {
             e.printStackTrace();
             return new Result(false, MessageConstant.QUERY_CHECKITEM_FAIL);
         }
+    }
+
+    @RequestMapping("/findAll")
+    public Result findAll() {
+        List<CheckItem> checkItemList = checkItemService.findAll();
+        if (checkItemList != null && checkItemList.size() > 0) {
+            Result result = new Result(true, MessageConstant.QUERY_CHECKITEM_SUCCESS);
+            result.setData(checkItemList);
+            return result;
+        }
+        return new Result(false, MessageConstant.QUERY_CHECKITEM_FAIL);
     }
 
     @RequestMapping("/edit")
