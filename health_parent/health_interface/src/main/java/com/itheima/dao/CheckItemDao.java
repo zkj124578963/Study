@@ -3,6 +3,8 @@ package com.itheima.dao;
 import com.github.pagehelper.Page;
 import com.itheima.pojo.CheckItem;
 
+import java.util.List;
+
 public interface CheckItemDao {
     /**
      * 持久化Dao层
@@ -21,4 +23,6 @@ public interface CheckItemDao {
     public void deleteById(int id);
 
     public CheckItem findById(int id);
+
+    public List<CheckItem> findAll();
 }
