@@ -5,6 +5,8 @@ import com.itheima.entity.QueryPageBean;
 import com.itheima.entity.Result;
 import com.itheima.pojo.CheckItem;
 
+import java.util.List;
+
 public interface CheckItemService {
 
     public void add(CheckItem checkItem);
@@ -14,6 +16,8 @@ public interface CheckItemService {
     public void deleteById(Integer id);
 
     public CheckItem findById(Integer id);
+
+    public List<CheckItem> findAll();
 
     public void edit(CheckItem checkItem);
 
